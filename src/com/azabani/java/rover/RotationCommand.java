@@ -1,6 +1,8 @@
 package com.azabani.java.rover;
 
-public class RotationCommand implements RoverCommand {
+public class RotationCommand
+	implements RoverCommand, AsynchronousCommand {
+	ConcreteDriver driver;
 	double angle; // clockwise degrees, |angle| <= 180
 	public RotationCommand(double angle)
 		throws IllegalArgumentException {
@@ -10,8 +12,11 @@ public class RotationCommand implements RoverCommand {
 			);
 		this.angle = angle;
 	}
-	public void execute(/* TODO: Driver d */) {
-		// TODO: d.turn(angle);
+	public void setDriver(ConcreteDriver driver) {
+		this.driver = driver;
+	}
+	public void execute() {
+		driver.turn(angle);
 	}
 	public String toString() {
 		return "rotate:" + Double.toString(angle);

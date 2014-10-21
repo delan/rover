@@ -13,6 +13,9 @@ public class RoverTaskList implements Iterable<RoverCommand> {
 	public void add(RoverCommand c) {
 		commands.add(c);
 	}
+	public int length() {
+		return commands.size();
+	}
 	public Iterator<RoverCommand> iterator() {
 		return Collections.unmodifiableList(commands).iterator();
 	}

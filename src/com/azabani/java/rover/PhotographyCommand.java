@@ -1,8 +1,13 @@
 package com.azabani.java.rover;
 
-public class PhotographyCommand implements RoverCommand {
-	public void execute(/* TODO: Camera c */) {
-		// TODO: c.takePhoto();
+public class PhotographyCommand
+	implements RoverCommand, AsynchronousCommand {
+	ConcreteCamera camera;
+	public void setCamera(ConcreteCamera camera) {
+		this.camera = camera;
+	}
+	public void execute() {
+		camera.takePhoto();
 	}
 	public String toString() {
 		return "photograph";

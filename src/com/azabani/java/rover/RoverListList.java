@@ -16,6 +16,9 @@ public class RoverListList implements Iterable<RoverTaskList> {
 	public RoverTaskList get(int i) {
 		return lists.get(i);
 	}
+	public int length() {
+		return lists.size();
+	}
 	public Iterator<RoverTaskList> iterator() {
 		return Collections.unmodifiableList(lists).iterator();
 	}

@@ -1,12 +1,13 @@
 package com.azabani.java.rover;
 
-import invalid.ezard.brad.java.rover.fake.Driver;
+import com.azabani.java.rover.fake.Driver;
 import java.util.List;
 import java.util.LinkedList;
 
 public class ConcreteDriver extends Driver implements ObservableDevice {
 	private List<DeviceObserver> observers;
 	public ConcreteDriver() {
+		super();
 		observers = new LinkedList<DeviceObserver>();
 	}
 	protected void moveFinished() {

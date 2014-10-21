@@ -1,6 +1,6 @@
 package com.azabani.java.rover;
 
-import invalid.ezard.brad.java.rover.fake.Camera;
+import com.azabani.java.rover.fake.Camera;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -8,6 +8,7 @@ public class ConcreteCamera extends Camera
 	implements ObservableDevice {
 	private List<DeviceObserver> observers;
 	public ConcreteCamera() {
+		super();
 		observers = new LinkedList<DeviceObserver>();
 	}
 	protected void photoReady(char[] photoData) {

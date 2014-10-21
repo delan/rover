@@ -1,6 +1,6 @@
 package com.azabani.java.rover;
 
-import invalid.ezard.brad.java.rover.fake.SoilAnalyser;
+import com.azabani.java.rover.fake.SoilAnalyser;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -8,6 +8,7 @@ public class ConcreteSoilAnalyser extends SoilAnalyser
 	implements ObservableDevice {
 	private List<DeviceObserver> observers;
 	public ConcreteSoilAnalyser() {
+		super();
 		observers = new LinkedList<DeviceObserver>();
 	}
 	protected void analysisReady(String soilAnalysis) {

@@ -1,6 +1,8 @@
 package com.azabani.java.rover;
 
-public class TranslationCommand implements RoverCommand {
+public class TranslationCommand
+	implements RoverCommand, AsynchronousCommand {
+	ConcreteDriver driver;
 	double distance; // forward metres, |distance| <= 100
 	public TranslationCommand(double distance)
 		throws IllegalArgumentException {
@@ -10,8 +12,11 @@ public class TranslationCommand implements RoverCommand {
 			);
 		this.distance = distance;
 	}
-	public void execute(/* TODO: Driver d */) {
-		// TODO: d.drive(distance);
+	public void setDriver(ConcreteDriver driver) {
+		this.driver = driver;
+	}
+	public void execute() {
+		driver.drive(distance);
 	}
 	public String toString() {
 		return "translate:" + Double.toString(distance);

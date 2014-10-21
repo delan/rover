@@ -3,7 +3,8 @@ package com.azabani.java.rover;
 import java.util.Stack;
 import java.util.Iterator;
 
-public class RecursionCommand implements RoverCommand {
+public class RecursionCommand
+	implements RoverCommand {
 	int listIndex; // non-negative
 	RoverListList program;
 	Stack<Iterator<RoverCommand>> stack;
