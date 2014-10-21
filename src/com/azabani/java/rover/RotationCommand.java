@@ -13,4 +13,7 @@ public class RotationCommand implements RoverCommand {
 	public void execute(/* TODO: Driver d */) {
 		// TODO: d.turn(angle);
 	}
+	public String toString() {
+		return "rotate:" + Double.toString(angle);
+	}
 }

@@ -4,4 +4,7 @@ public class AnalysisCommand implements RoverCommand {
 	public void execute(/* TODO: SoilAnalyser a */) {
 		// TODO: a.analyse();
 	}
+	public String toString() {
+		return "analyse";
+	}
 }

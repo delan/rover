@@ -13,4 +13,7 @@ public class TranslationCommand implements RoverCommand {
 	public void execute(/* TODO: Driver d */) {
 		// TODO: d.drive(distance);
 	}
+	public String toString() {
+		return "translate:" + Double.toString(distance);
+	}
 }
