@@ -1,6 +1,15 @@
 <project default="compile">
 	<target name="compile">
 		<mkdir dir="bin"/>
+		<mkdir dir="dist"/>
 		<javac srcdir="src" destdir="bin"/>
+		<jar destfile="dist/rover.jar" basedir="bin">
+			<manifest>
+			<attribute
+				name="Main-Class"
+				value="com.azabani.java.rover.RoverProgram"
+			/>
+			</manifest>
+		</jar>
 	</target>
 </project>
