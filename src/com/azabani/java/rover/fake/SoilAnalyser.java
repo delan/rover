@@ -10,7 +10,7 @@ public abstract class SoilAnalyser {
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) {}
-			analysisReady("pH:420");
+			analysisReady("[fake soil analysis]");
 		}
 	}
 	public void analyse() {

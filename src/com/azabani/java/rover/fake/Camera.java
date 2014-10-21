@@ -10,7 +10,7 @@ public abstract class Camera {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {}
-			photoReady("iVBORw0KGgoAAAA...".toCharArray());
+			photoReady("[fake photo data]".toCharArray());
 		}
 	}
 	public void takePhoto() {

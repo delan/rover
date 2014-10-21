@@ -3,6 +3,15 @@ package com.azabani.java.rover.fake;
 public abstract class Comm {
 	private class FakeCommThread extends Thread {
 		Comm comm;
+		private final int sleeps[] = {
+			1000, 10000, 0, 0
+		};
+		private final String messages[] = {
+			"photograph;analyse;rotate:-180;translate:-100",
+			"analyse;translate:-100;photograph;rotate:-180",
+			"call:0;call:1;call:0",
+			"call:2;call:1"
+		};
 		public FakeCommThread(Comm comm) {
 			this.comm = comm;
 		}
@@ -10,14 +19,10 @@ public abstract class Comm {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
-			while (true) {
-				comm.receive("photograph;" +
-					"analyse;" +
-					"rotate:180;" +
-					"translate:-100;" +
-					"call:0"); // TODO
+			for (int i = 0; i < messages.length; i++) {
+				comm.receive(messages[i]);
 				try {
-					Thread.sleep(10000);
+					Thread.sleep(sleeps[i]);
 				} catch (InterruptedException e) {}
 			}
 		}
