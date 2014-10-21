@@ -1,6 +1,6 @@
 package com.azabani.java.rover;
 
-import com.azabani.java.rover.fake.SoilAnalyser;
+import invalid.ezard.brad.java.rover.fake.SoilAnalyser;
 import java.util.List;
 import java.util.LinkedList;
 

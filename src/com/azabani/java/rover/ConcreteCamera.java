@@ -1,6 +1,6 @@
 package com.azabani.java.rover;
 
-import com.azabani.java.rover.fake.Camera;
+import invalid.ezard.brad.java.rover.fake.Camera;
 import java.util.List;
 import java.util.LinkedList;
 
