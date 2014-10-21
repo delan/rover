@@ -45,7 +45,7 @@ public class RoverController {
 			camera, this
 		);
 	}
-	public void start() throws InterruptedException {
+	public void start() {
 		int nextListIndex = 0;
 		while (true) {
 			if (!busy) {
@@ -89,7 +89,7 @@ public class RoverController {
 					stack.pop();
 				}
 			}
-			Thread.sleep(100);
+			RoverUtils.sleep(100);
 		}
 	}
 	public void messageReceived(String message) {

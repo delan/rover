@@ -1,5 +1,7 @@
 package com.azabani.java.rover.fake;
 
+import com.azabani.java.rover.RoverUtils;
+
 public abstract class Comm {
 	private class FakeCommThread extends Thread {
 		Comm comm;
@@ -16,14 +18,10 @@ public abstract class Comm {
 			this.comm = comm;
 		}
 		public void run() {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {}
+			RoverUtils.sleep(1000);
 			for (int i = 0; i < messages.length; i++) {
 				comm.receive(messages[i]);
-				try {
-					Thread.sleep(sleeps[i]);
-				} catch (InterruptedException e) {}
+				RoverUtils.sleep(sleeps[i]);
 			}
 		}
 	}

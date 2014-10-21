@@ -1,5 +1,7 @@
 package com.azabani.java.rover.fake;
 
+import com.azabani.java.rover.RoverUtils;
+
 public abstract class Camera {
 	private class FakeCameraThread extends Thread {
 		Camera camera;
@@ -7,9 +9,7 @@ public abstract class Camera {
 			this.camera = camera;
 		}
 		public void run() {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {}
+			RoverUtils.sleep(500);
 			photoReady("[fake photo data]".toCharArray());
 		}
 	}

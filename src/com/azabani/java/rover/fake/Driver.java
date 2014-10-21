@@ -1,5 +1,7 @@
 package com.azabani.java.rover.fake;
 
+import com.azabani.java.rover.RoverUtils;
+
 public abstract class Driver {
 	private class FakeDriverThread extends Thread {
 		Driver driver;
@@ -7,9 +9,7 @@ public abstract class Driver {
 			this.driver = driver;
 		}
 		public void run() {
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {}
+			RoverUtils.sleep(3000);
 			if (Math.random() > 0.1)
 				moveFinished();
 			else

@@ -1,5 +1,7 @@
 package com.azabani.java.rover.fake;
 
+import com.azabani.java.rover.RoverUtils;
+
 public abstract class SoilAnalyser {
 	private class FakeSoilAnalyserThread extends Thread {
 		SoilAnalyser soilAnalyser;
@@ -7,9 +9,7 @@ public abstract class SoilAnalyser {
 			this.soilAnalyser = soilAnalyser;
 		}
 		public void run() {
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {}
+			RoverUtils.sleep(1500);
 			analysisReady("[fake soil analysis]");
 		}
 	}
