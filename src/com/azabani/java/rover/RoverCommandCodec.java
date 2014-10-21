@@ -1,10 +1,10 @@
 package com.azabani.java.rover;
 
 public class RoverCommandCodec {
-	public static String encode(RoverCommand c) {
+	public String encode(RoverCommand c) {
 		return c.toString();
 	}
-	public static RoverCommand decode(String s) {
+	public RoverCommand decode(String s) {
 		String[] tokens = s.split(":", 2);
 		String kind = tokens[0];
 		if (kind.equals("rotate")) {
