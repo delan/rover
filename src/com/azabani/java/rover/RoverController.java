@@ -46,7 +46,8 @@ public class RoverController {
 		// TODO: write algorithm here
 	}
 	public void messageReceived(String message) {
-		// TODO: write algorithm here
+		RoverCommandCodec c = new RoverCommandCodec();
+		program.add(c.decode(message));
 	}
 	public void drivingAttempted(boolean success) {
 		// TODO: write algorithm here
