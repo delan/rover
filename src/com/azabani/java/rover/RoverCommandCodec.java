@@ -8,7 +8,7 @@ public class RoverCommandCodec {
 		RoverTaskList result = new RoverTaskList();
 		String[] tasks = s.split(";");
 		for (String task : tasks) {
-			String[] tokens = s.split(":", 2);
+			String[] tokens = task.split(":", 2);
 			String kind = tokens[0];
 			if (kind.equals("rotate")) {
 				double angle = Double.parseDouble(tokens[1]);
