@@ -4,6 +4,7 @@ import java.util.Stack;
 import java.util.Iterator;
 
 public class RoverController {
+	RoverListList program;
 	private Stack<Iterator<RoverCommand>> stack;
 
 	private ConcreteComm comm;
@@ -22,6 +23,7 @@ public class RoverController {
 		ConcreteSoilAnalyser soilAnalyser,
 		ConcreteCamera camera
 	) {
+		program = new RoverListList();
 		stack = new Stack<Iterator<RoverCommand>>();
 		this.comm = comm;
 		this.driver = driver;
