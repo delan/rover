@@ -1,0 +1,232 @@
+\documentclass[a4paper,titlepage,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\hypersetup{
+	colorlinks,
+	pdfauthor=Delan Azabani,
+	pdftitle=Software Engineering 200: Mars rover assignment
+}
+
+\title{Software Engineering 200:\\Mars rover assignment}
+\date{October 21, 2014}
+\author{Delan Azabani}
+
+\pagenumbering{gobble}
+\thispdfpagelabel0
+
+\titlespacing*\section{0pt}{0.5em}{0.5em}
+
+\begin{document}
+
+\maketitle
+\pagenumbering{arabic}
+
+To compile and run this assignment submission, use the following
+commands:
+
+\texttt{\% ant \&\& java -jar dist/rover.jar}
+
+\section{Part (c): system walkthrough}
+
+Let's say that mission control sent the following message to our rover
+on Mars:
+
+\texttt{analyse;translate:-100;photograph;rotate:-180}
+
+Each message represents a task list, where the tasks are separated by
+semicolons. Each task has a name, such as one shown above or
+\texttt{call}, which executes a previous task list. Parameters for a
+task such as angles, distances and task list numbers are written after
+their task name, separated by a colon.
+
+From the perspective of our rover's system, this message starts at
+\texttt{Comm.receive(String)}, which is implemented by
+\texttt{ConcreteComm.receive(String)}. Because \texttt{ConcreteComm}
+is a subject in the Observer pattern, all \texttt{receive()} needs to
+do is call the subject's method named \texttt{notifyObservers()}, which
+required by the \texttt{ObservableDevice} interface.
+
+\texttt{notifyObservers()} then iterates through each of the
+\texttt{DeviceObserver} objects who are listening, calling their
+\texttt{update()} methods with the message string from
+\texttt{receive()}. In practice, the only observer of
+\texttt{ConcreteComm} is one \texttt{CommObserver} object.
+
+\texttt{CommObserver.update()} takes the message and simply downcasts
+it to a \texttt{String}. Then it finishes by passing it to
+\texttt{controller.messageReceived()}, where \texttt{controller} is the
+\texttt{RoverController} that owns the \texttt{CommObserver}.
+
+\texttt{RoverController.messageReceived()} instantiates a
+\texttt{RoverCommandCodec} to parse the message and turn it into a task
+list. There's an unfortunate level of coupling here because the task
+objects that its \texttt{decode()} method creates need to have
+references to various devices (a \texttt{Camera}, a \texttt{Driver} and
+a \texttt{SoilAnalyser}). Worse still, a \texttt{RecursionCommand}
+needs to be able to read existing task lists and modify the execution
+stack. As a result, the \texttt{RoverController} needs to pass many
+parameters to \texttt{decode()}.
+
+In return, we now have a \texttt{RoverTaskList} containing a
+\texttt{RoverCommand} for each task in the incoming message, and we
+append this task list to \texttt{program}, a \texttt{RoverListList}
+which represents a list of task lists. What a mouthful.
+
+In another thread, \texttt{RoverController.start()} has been polling
+an execution stack called \texttt{stack} jadedly, because thus far it
+has remained empty. The stack simply contains \texttt{Iterator} objects
+inside active task lists. As there's now a task list in
+\texttt{program}, we take an iterator for it and push it onto the
+stack. Whenever \texttt{busy} is \texttt{false} (iff no tasks are
+running) and there's a task list on the stack, we grab the next task
+with \texttt{Iterator.next()} and call its \texttt{execute()} method.
+
+\texttt{AnalysisCommand.execute()} calls
+\texttt{soilAnalyser.analyse()} using its private reference field, and
+\texttt{ConcreteSoilAnalyser} sends the results of the analysis back to
+the controller using the same Observer workflow discussed previously.
+
+Finally, \texttt{RoverController.analysisReceived()} calls
+\texttt{Comm.send()} and Earth is pleased with the rover. Rinse and
+repeat with the rest of the tasks and task lists.
+
+\section{Part (d): design patterns}
+
+The Observer pattern is essential and works well with the asynchronous
+nature of this system. It's significantly cleaner than setting and
+polling for changes in global state.
+\texttt{Concrete\{Comm,Driver,SoilAnalyser,Camera\}} are the subjects,
+each implementing the \texttt{ObservableDevice} interface, while
+\texttt{\{Comm,Driver,SoilAnalyser,Camera\}Observer} are the observers,
+implementing \texttt{DeviceObserver}. \texttt{RoverController} can even
+be seen as an overarching observer of the other observers.
+
+Dependency injection is used to decouple the \texttt{RoverController}
+from any particular set of concrete device classes that it uses.
+\texttt{RoverProgram} is the entry point of execution, and it is
+responsible for injecting instances of
+\texttt{Concrete\{Comm,Driver,SoilAnalyser,Camera\}} or any subclasses
+of these into a new controller object.
+
+The Factory pattern is realised through \texttt{RoverCommandCodec}. By
+refactoring task list message parsing out of \texttt{RoverController},
+the code which instantiates various subclasses of \texttt{RoverCommand}
+is isolated in its own class without any other functionality.
+
+\texttt{RoverCommand} is an interface that demonstrates the Command
+pattern in combination with
+\texttt{\{Rotation,Translation,Analysis,Photography,Recursion\}Command},
+the classes that implement it. The key benefit of using this pattern
+here is that it allows the code in \texttt{RoverController} to deal
+purely with coordinating the execution stack, while treating tasks as
+opaque entities. All the controller does is choose the time of
+execution.
+
+The container classes \texttt{RoverListList} and \texttt{RoverTaskList}
+are subjects of the Iterator pattern, as it allows the
+\texttt{RoverController} to keep track of a `cursor' in each task list
+without the need for clumsy integral indices. Actually I ended up being
+unable to take advantage of the pattern with \texttt{RoverListList},
+because the iterator would die whenever the list of task lists is
+modified, which occurs whenever a new task list arrives.
+
+\section{Part (e): alternative design choices}
+
+With my final design, I couldn't take advantage of Java's native
+implementation of the Observer pattern, because \texttt{Observable}
+is a class, not an interface, and I was already using my implementation
+inheritance relationship with \texttt{Comm}, \texttt{Driver} and the
+like. I could have instead decorated \texttt{Concrete*} with four
+classes that extended \texttt{Observable}. While this would obviate the
+need for boring Observer code, it would introduce delegate methods
+instead. I chose the route with fewer classes overall.
+
+\texttt{RecursionCommand} is unlike the other task classes, because it
+doesn't really \textit{do} anything other than push an old task list
+reference onto the execution stack. There's no device associated with
+it, and thus no observer to tell the controller to reset \texttt{busy}.
+I ended up working around this by `tagging' the other task classes with
+the empty interface \texttt{AsynchronousCommand}, and checking for this
+`tag' with \texttt{instanceof} after firing off \texttt{execute()}. One
+could argue that this may be an anti-pattern, as it's a bit of a
+semantic abuse of the interface language feature. After finishing the
+assignment, I discovered that this technique was common before Java
+introduced annotations; had I known about annotations earlier, I would
+have certainly preferred to use them instead.
+
+\section{Part (f): separation of concerns}
+
+At the risk of rehashing my answer to part (d), virtually every design
+pattern I used was chosen at least partially due to its capacity to
+improve the separation of concerns within classes inside the Mars rover
+system.
+
+The Observer pattern separated what was to happen after a device had
+new information, from each device's specific events and their
+implementations.
+
+The Factory pattern separated the choice of concrete task classes from
+\texttt{RoverController}, while dependency injection separated the
+choice of device classes from its constructor.
+
+The Command pattern separates the `when' from the `how' of executing
+each task. 
+
+The Iterator pattern separates the act of walking through tasks from
+the underlying data structure used, because only the former is relevant
+to the controller class.
+
+\section{Part (g): avoiding unnecessary duplication}
+
+The design used in this assignment does not use any delegate methods or
+decoration classes outside of \texttt{RoverListList} and
+\texttt{RoverTaskList}, which are basically encapsulating
+\textit{semantic} sugar around what are essentially \texttt{ArrayList}
+objects.
+
+I've taken advantage of the existing relevant exception class
+\texttt{IllegalArgumentException} rather than creating my own subclass
+just for this system. For readers of the source code, this provides the
+slight additional benefit of familiarity.
+
+The use of tedious \texttt{switch}-like constructs on external input
+has been restricted to one such usage inside
+\texttt{RoverCommandCodec.decode()} only.
+
+The frequently used \texttt{Thread.sleep} wrapped in a
+\texttt{try}-\texttt{catch} for \texttt{InterruptedException} has
+been refactored into a static method in \texttt{RoverUtils} for
+clarity of reading.
+
+\section{Part (h): testability}
+
+As the name suggests, the package \texttt{com.azabani.java.rover.fake}
+contains fake versions of the classes \texttt{Comm}, \texttt{Driver},
+\texttt{SoilAnalyser} and \texttt{Camera}. While these already
+existed hypothetically, and are external to the system, they were
+important for four reasons:
+
+\begin{itemize}
+	\item They allowed me to build the system during development
+	      and check the syntax;
+	\item The compiler would also check data types, a weak form of
+	      semantic verification;
+	\item I could craft a limited set of test data to use as an
+	      occasional sanity check; and
+	\item Being able to run parts of the system while writing it
+	      allowed me to better visualise where I was going with the
+	      system, because I felt less `blind'.
+\end{itemize}
+
+Given more time, I would have developed unit test harnesses using JUnit
+and Mockito to test the system in a much more rigorous manner,
+employing the techniques covered in \textit{Software Engineering 110}.
+The use of the Factory pattern and dependency injection would certainly
+help with unit testing, because of the way they effectively decouple
+classes.
+
+\end{document}
