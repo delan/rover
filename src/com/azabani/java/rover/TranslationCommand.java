@@ -11,6 +11,6 @@ public class TranslationCommand implements RoverCommand {
 		this.distance = distance;
 	}
 	public void execute(/* TODO: Driver d */) {
-		// TODO: Driver.drive(distance);
+		// TODO: d.drive(distance);
 	}
 }
