@@ -2,8 +2,8 @@ package com.azabani.java.rover;
 
 public class TranslationCommand
 	implements RoverCommand, AsynchronousCommand {
-	ConcreteDriver driver;
-	double distance; // forward metres, |distance| <= 100
+	private ConcreteDriver driver;
+	private double distance; // forward metres, |distance| <= 100
 	public TranslationCommand(double distance)
 		throws IllegalArgumentException {
 		if (Double.isNaN(distance) || Math.abs(distance) > 100.0)

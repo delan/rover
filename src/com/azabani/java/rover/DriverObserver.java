@@ -1,8 +1,8 @@
 package com.azabani.java.rover;
 
 public class DriverObserver implements DeviceObserver {
-	ConcreteDriver driver;
-	RoverController controller;
+	private ConcreteDriver driver;
+	private RoverController controller;
 	public DriverObserver(ConcreteDriver driver,
 		RoverController controller) {
 		this.driver = driver;

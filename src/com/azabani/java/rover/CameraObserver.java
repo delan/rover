@@ -1,8 +1,8 @@
 package com.azabani.java.rover;
 
 public class CameraObserver implements DeviceObserver {
-	ConcreteCamera camera;
-	RoverController controller;
+	private ConcreteCamera camera;
+	private RoverController controller;
 	public CameraObserver(ConcreteCamera camera,
 		RoverController controller) {
 		this.camera = camera;

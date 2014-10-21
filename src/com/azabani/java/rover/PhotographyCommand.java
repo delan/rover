@@ -2,7 +2,7 @@ package com.azabani.java.rover;
 
 public class PhotographyCommand
 	implements RoverCommand, AsynchronousCommand {
-	ConcreteCamera camera;
+	private ConcreteCamera camera;
 	public void setCamera(ConcreteCamera camera) {
 		this.camera = camera;
 	}

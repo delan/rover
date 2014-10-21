@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 public class RecursionCommand
 	implements RoverCommand {
-	int listIndex; // non-negative
-	RoverListList program;
-	Stack<Iterator<RoverCommand>> stack;
+	private int listIndex; // non-negative
+	private RoverListList program;
+	private Stack<Iterator<RoverCommand>> stack;
 	public RecursionCommand(int listIndex)
 		throws IllegalArgumentException {
 		if (listIndex < 0)

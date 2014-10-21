@@ -2,8 +2,8 @@ package com.azabani.java.rover;
 
 public class RotationCommand
 	implements RoverCommand, AsynchronousCommand {
-	ConcreteDriver driver;
-	double angle; // clockwise degrees, |angle| <= 180
+	private ConcreteDriver driver;
+	private double angle; // clockwise degrees, |angle| <= 180
 	public RotationCommand(double angle)
 		throws IllegalArgumentException {
 		if (Double.isNaN(angle) || Math.abs(angle) > 180.0)

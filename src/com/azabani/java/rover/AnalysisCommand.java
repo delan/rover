@@ -2,7 +2,7 @@ package com.azabani.java.rover;
 
 public class AnalysisCommand
 	implements RoverCommand, AsynchronousCommand {
-	ConcreteSoilAnalyser soilAnalyser;
+	private ConcreteSoilAnalyser soilAnalyser;
 	public void setSoilAnalyser(ConcreteSoilAnalyser soilAnalyser) {
 		this.soilAnalyser = soilAnalyser;
 	}

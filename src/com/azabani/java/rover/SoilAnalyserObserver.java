@@ -1,8 +1,8 @@
 package com.azabani.java.rover;
 
 public class SoilAnalyserObserver implements DeviceObserver {
-	ConcreteSoilAnalyser soilAnalyser;
-	RoverController controller;
+	private ConcreteSoilAnalyser soilAnalyser;
+	private RoverController controller;
 	public SoilAnalyserObserver(ConcreteSoilAnalyser soilAnalyser,
 		RoverController controller) {
 		this.soilAnalyser = soilAnalyser;
